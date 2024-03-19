@@ -1,7 +1,7 @@
 *Dasturni ishlatish uchun quyidagi qadamlarni bajaring:*
 
-1. ```git clone```
-2. ```cd```
+1. ```git clone https://github.com/JahongirHakimjonov/FelixCompanyTask.git```
+2. ```cd FelixCompanyTask```
 3. ```python -m venv venv```
 4. ```source venv/bin/activate``` (Linux) yoki ```venv\Scripts\activate``` (Windows)
 5. ```pip install -r requirements.txt```
