@@ -5,7 +5,7 @@ from .models import Product, Material, ProductMaterial, Warehouse
 class WarehouseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Warehouse
-        fields = ['price']
+        fields = ["price"]
 
 
 class ProductMaterialSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class ProductMaterialSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductMaterial
-        fields = ['material', 'quantity', 'warehouse']
+        fields = ["material", "quantity", "warehouse"]
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -21,10 +21,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['product_materials']
+        fields = ["product_materials"]
 
 
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Material
-        fields = ['name']
+        fields = ["name"]

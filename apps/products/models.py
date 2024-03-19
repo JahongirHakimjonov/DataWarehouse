@@ -11,8 +11,8 @@ class Product(AbstractModel):
         return self.name
 
     class Meta:
-        verbose_name = 'Product'
-        verbose_name_plural = 'Products'
+        verbose_name = "Product"
+        verbose_name_plural = "Products"
 
 
 class Material(AbstractModel):
@@ -22,21 +22,23 @@ class Material(AbstractModel):
         return self.name
 
     class Meta:
-        verbose_name = 'Material'
-        verbose_name_plural = 'Materials'
+        verbose_name = "Material"
+        verbose_name_plural = "Materials"
 
 
 class ProductMaterial(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_materials')
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="product_materials"
+    )
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
     def __str__(self):
-        return f'{self.product.name} - {self.material.name}'
+        return f"{self.product.name} - {self.material.name}"
 
     class Meta:
-        verbose_name = 'Product Material'
-        verbose_name_plural = 'Product Materials'
+        verbose_name = "Product Material"
+        verbose_name_plural = "Product Materials"
 
 
 class Warehouse(AbstractModel):
@@ -45,8 +47,8 @@ class Warehouse(AbstractModel):
     price = models.FloatField()
 
     def __str__(self):
-        return f'{self.material.name} - {self.remainder}'
+        return f"{self.material.name} - {self.remainder}"
 
     class Meta:
-        verbose_name = 'Warehouse'
-        verbose_name_plural = 'Warehouses'
+        verbose_name = "Warehouse"
+        verbose_name_plural = "Warehouses"
