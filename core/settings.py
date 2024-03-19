@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "apps.company.apps.CompanyConfig",
+    "apps.products.apps.ProductsConfig",
     "apps.shared.apps.SharedConfig",
     "rest_framework",
 ]
@@ -122,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "ru-RU"
+LANGUAGE_CODE = "uz-uz"
 
 TIME_ZONE = "Asia/Tashkent"
 
