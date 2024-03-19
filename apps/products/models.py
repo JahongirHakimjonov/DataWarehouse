@@ -31,7 +31,7 @@ class ProductMaterial(models.Model):
         Product, on_delete=models.CASCADE, related_name="product_materials"
     )
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    quantity = models.FloatField()
 
     def __str__(self):
         return f"{self.product.name} - {self.material.name}"

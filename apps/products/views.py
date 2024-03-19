@@ -1,7 +1,6 @@
 from .serializers import (
     ProductSerializer,
     WarehouseSerializer,
-    ProductMaterialSerializer,
     MaterialSerializer,
 )
 from rest_framework import viewsets
