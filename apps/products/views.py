@@ -39,7 +39,7 @@ class ProductViewSet(viewsets.ModelViewSet):
                     warehouse_data = WarehouseSerializer(warehouse).data
                     warehouse_data["warehouse_id"] = warehouse.id
                     warehouse_data["material_name"] = material_data["name"]
-                    warehouse_data["qty"] = product_material.quantity
+                    warehouse_data["qty"] = product_material.quantity * product.quantity
                     warehouse_data["price"] = warehouse.price
                     materials_data.append(warehouse_data)
             # Create a new dictionary and add the keys in the desired order

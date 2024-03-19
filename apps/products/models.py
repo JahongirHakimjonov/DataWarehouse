@@ -13,6 +13,7 @@ class Product(AbstractModel):
     class Meta:
         verbose_name = "Product"
         verbose_name_plural = "Products"
+        db_table = "products"
 
 
 class Material(AbstractModel):
@@ -24,6 +25,7 @@ class Material(AbstractModel):
     class Meta:
         verbose_name = "Material"
         verbose_name_plural = "Materials"
+        db_table = "materials"
 
 
 class ProductMaterial(models.Model):
@@ -39,6 +41,7 @@ class ProductMaterial(models.Model):
     class Meta:
         verbose_name = "Product Material"
         verbose_name_plural = "Product Materials"
+        db_table = "product_materials"
 
 
 class Warehouse(AbstractModel):
@@ -52,3 +55,4 @@ class Warehouse(AbstractModel):
     class Meta:
         verbose_name = "Warehouse"
         verbose_name_plural = "Warehouses"
+        db_table = "warehouses"
