@@ -3,9 +3,11 @@ from apps.shared.models import AbstractModel
 from django.db import models
 
 
+# Mahsulotlar uchun model
 class Product(AbstractModel):
     name = models.CharField(max_length=100)
     quantity = models.IntegerField(default=0)
+    code = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -16,6 +18,7 @@ class Product(AbstractModel):
         db_table = "products"
 
 
+# Materiallar uchun model
 class Material(AbstractModel):
     name = models.CharField(max_length=100)
 
@@ -28,6 +31,7 @@ class Material(AbstractModel):
         db_table = "materials"
 
 
+# Mahsulot va materiallar uchun model
 class ProductMaterial(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name="product_materials"
@@ -44,6 +48,7 @@ class ProductMaterial(models.Model):
         db_table = "product_materials"
 
 
+# Omborxona uchun model
 class Warehouse(AbstractModel):
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     remainder = models.FloatField()

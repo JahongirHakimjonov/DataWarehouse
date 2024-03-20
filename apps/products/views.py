@@ -27,6 +27,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         data = []
+        warehouse_remainders = {}  # Omborxonadagi qolgan miqdorlar
         for product in queryset:
             product_materials = ProductMaterial.objects.filter(product=product)
             materials_data = []
@@ -37,17 +38,16 @@ class ProductViewSet(viewsets.ModelViewSet):
                     material=product_material.material
                 ).order_by(
                     "id"
-                )  # Order by id to use products in the order they were added
+                )
                 total_qty = product_material.quantity * product.quantity
                 for warehouse in warehouses:
-                    if (
-                        warehouse.remainder == 0
-                    ):  # Skip the warehouse if its remainder is 0
+                    warehouse_remainder = warehouse_remainders.get(warehouse.id, warehouse.remainder)  # Lug'atdan foydalanib, bazadan foydalanmaslik
+                    if warehouse_remainder == 0:
                         continue
                     if total_qty <= 0:
                         break
-                    if warehouse.remainder >= total_qty:
-                        warehouse_temp_remainder = warehouse.remainder - total_qty
+                    if warehouse_remainder >= total_qty:
+                        warehouse_remainders[warehouse.id] = warehouse_remainder - total_qty  # Lug'atni yangilash
                         warehouse_data = WarehouseSerializer(warehouse).data
                         warehouse_data["warehouse_id"] = warehouse.id
                         warehouse_data["material_name"] = material_data["name"]
@@ -55,13 +55,14 @@ class ProductViewSet(viewsets.ModelViewSet):
                         warehouse_data["price"] = warehouse.price
                         total_qty = 0
                     else:
-                        total_qty -= warehouse.remainder
-                        warehouse_temp_remainder = 0
+                        total_qty -= warehouse_remainder
+                        warehouse_remainders[warehouse.id] = 0  # Lug'atni yangilash
                         warehouse_data = WarehouseSerializer(warehouse).data
                         warehouse_data["warehouse_id"] = warehouse.id
                         warehouse_data["material_name"] = material_data["name"]
-                        warehouse_data["qty"] = warehouse.remainder
+                        warehouse_data["qty"] = warehouse_remainder
                         warehouse_data["price"] = warehouse.price
+
                     materials_data.append(warehouse_data)
 
                 if total_qty > 0:
