@@ -5,13 +5,14 @@ from .serializers import (
 )
 from rest_framework import viewsets
 from rest_framework.response import Response
-from .models import Product, Warehouse, ProductMaterial, Material
+from .models import Product, Warehouse, ProductMaterial
 
 
 class WarehouseViewSet(viewsets.ModelViewSet):
     serializer_class = WarehouseSerializer
 
     def get_queryset(self):
+        # Omborxonadan kerakli xomashyolar
         product_materials = ProductMaterial.objects.filter(
             product__name=self.request.query_params.get("product_name")
         )
@@ -27,22 +28,40 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         data = []
         for product in queryset:
-            product_data = ProductSerializer(product).data
             product_materials = ProductMaterial.objects.filter(product=product)
             materials_data = []
             for product_material in product_materials:
                 material_data = MaterialSerializer(product_material.material).data
                 warehouses = Warehouse.objects.filter(
                     material=product_material.material
-                )
+                ).order_by('id')  # Order by id to use products in the order they were added
+                total_qty = product_material.quantity * product.quantity
                 for warehouse in warehouses:
-                    warehouse_data = WarehouseSerializer(warehouse).data
-                    warehouse_data["warehouse_id"] = warehouse.id
-                    warehouse_data["material_name"] = material_data["name"]
-                    warehouse_data["qty"] = product_material.quantity * product.quantity
-                    warehouse_data["price"] = warehouse.price
+                    if total_qty <= 0:
+                        break
+                    if warehouse.remainder >= total_qty:
+                        warehouse_data = WarehouseSerializer(warehouse).data
+                        warehouse_data["warehouse_id"] = warehouse.id
+                        warehouse_data["material_name"] = material_data["name"]
+                        warehouse_data["qty"] = total_qty
+                        warehouse_data["price"] = warehouse.price
+                        total_qty = 0
+                    else:
+                        total_qty -= warehouse.remainder
+                        warehouse_temp_remainder = 0
+                        warehouse_data = WarehouseSerializer(warehouse).data
+                        warehouse_data["warehouse_id"] = warehouse.id
+                        warehouse_data["material_name"] = material_data["name"]
+                        warehouse_data["qty"] = warehouse.remainder
+                        warehouse_data["price"] = warehouse.price
                     materials_data.append(warehouse_data)
-            # Create a new dictionary and add the keys in the desired order
+                if total_qty > 0:
+                    materials_data.append({
+                        "warehouse_id": None,
+                        "material_name": material_data["name"],
+                        "qty": total_qty,
+                        "price": None
+                    })
             ordered_product_data = {
                 "product_name": product.name,
                 "product_qty": product.quantity,
