@@ -31,6 +31,7 @@ class ProductViewSet(viewsets.ModelViewSet):
             product_materials = ProductMaterial.objects.filter(product=product)
             materials_data = []
             for product_material in product_materials:
+
                 material_data = MaterialSerializer(product_material.material).data
                 warehouses = Warehouse.objects.filter(
                     material=product_material.material
