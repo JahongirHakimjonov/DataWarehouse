@@ -5,7 +5,7 @@ from .models import Product, Material, ProductMaterial, Warehouse
 
 @register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ["name", "quantity"]
+    list_display = ["name", "quantity", "code"]
     search_fields = ["name"]
     list_filter = ["name"]
 
