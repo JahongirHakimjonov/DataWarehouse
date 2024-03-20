@@ -31,4 +31,4 @@ class WarehouseAdmin(admin.ModelAdmin):
     list_filter = ["material", "remainder", "price"]
 
     def get_queryset(self, request):
-        return super().get_queryset(request).order_by('id')
+        return super().get_queryset(request).order_by("id")

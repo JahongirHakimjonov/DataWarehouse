@@ -34,12 +34,19 @@ class ProductViewSet(viewsets.ModelViewSet):
                 material_data = MaterialSerializer(product_material.material).data
                 warehouses = Warehouse.objects.filter(
                     material=product_material.material
-                ).order_by('id')  # Order by id to use products in the order they were added
+                ).order_by(
+                    "id"
+                )  # Order by id to use products in the order they were added
                 total_qty = product_material.quantity * product.quantity
                 for warehouse in warehouses:
+                    if (
+                        warehouse.remainder == 0
+                    ):  # Skip the warehouse if its remainder is 0
+                        continue
                     if total_qty <= 0:
                         break
                     if warehouse.remainder >= total_qty:
+                        warehouse_temp_remainder = warehouse.remainder - total_qty
                         warehouse_data = WarehouseSerializer(warehouse).data
                         warehouse_data["warehouse_id"] = warehouse.id
                         warehouse_data["material_name"] = material_data["name"]
@@ -55,13 +62,16 @@ class ProductViewSet(viewsets.ModelViewSet):
                         warehouse_data["qty"] = warehouse.remainder
                         warehouse_data["price"] = warehouse.price
                     materials_data.append(warehouse_data)
+
                 if total_qty > 0:
-                    materials_data.append({
-                        "warehouse_id": None,
-                        "material_name": material_data["name"],
-                        "qty": total_qty,
-                        "price": None
-                    })
+                    materials_data.append(
+                        {
+                            "warehouse_id": None,
+                            "material_name": material_data["name"],
+                            "qty": total_qty,
+                            "price": None,
+                        }
+                    )
             ordered_product_data = {
                 "product_name": product.name,
                 "product_qty": product.quantity,
