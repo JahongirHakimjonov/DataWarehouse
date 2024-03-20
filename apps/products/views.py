@@ -36,18 +36,20 @@ class ProductViewSet(viewsets.ModelViewSet):
                 material_data = MaterialSerializer(product_material.material).data
                 warehouses = Warehouse.objects.filter(
                     material=product_material.material
-                ).order_by(
-                    "id"
-                )
+                ).order_by("id")
                 total_qty = product_material.quantity * product.quantity
                 for warehouse in warehouses:
-                    warehouse_remainder = warehouse_remainders.get(warehouse.id, warehouse.remainder)  # Lug'atdan foydalanib, bazadan foydalanmaslik
+                    warehouse_remainder = warehouse_remainders.get(
+                        warehouse.id, warehouse.remainder
+                    )  # Lug'atdan foydalanib, bazadan foydalanmaslik
                     if warehouse_remainder == 0:
                         continue
                     if total_qty <= 0:
                         break
                     if warehouse_remainder >= total_qty:
-                        warehouse_remainders[warehouse.id] = warehouse_remainder - total_qty  # Lug'atni yangilash
+                        warehouse_remainders[warehouse.id] = (
+                            warehouse_remainder - total_qty
+                        )  # Lug'atni yangilash
                         warehouse_data = WarehouseSerializer(warehouse).data
                         warehouse_data["warehouse_id"] = warehouse.id
                         warehouse_data["material_name"] = material_data["name"]
