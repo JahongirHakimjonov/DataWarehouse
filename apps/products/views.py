@@ -15,7 +15,7 @@ class DataWarehouse(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         data = []
-        warehouse_remainders = {}  # Omborxonadagi qolgan miqdorlar
+        warehouse_remainders = {}  # omborxonadagi qolgan materillar miqdorini saqlash uchun
         for product in queryset:
             product_materials = ProductMaterial.objects.filter(product=product)
             materials_data = []
@@ -29,15 +29,15 @@ class DataWarehouse(viewsets.ModelViewSet):
                 for warehouse in warehouses:
                     warehouse_remainder = warehouse_remainders.get(
                         warehouse.id, warehouse.remainder
-                    )  # Lug'atdan foydalanib, bazadan foydalanmaslik
+                    )  # Dict dan foydalanib, bazadan foydalanmaslik uchun
                     if warehouse_remainder == 0:
                         continue
                     if total_qty <= 0:
                         break
                     if warehouse_remainder >= total_qty:
                         warehouse_remainders[warehouse.id] = (
-                            warehouse_remainder - total_qty
-                        )  # Lug'atni yangilash
+                                warehouse_remainder - total_qty
+                        )  # Dict ni yangilash
                         warehouse_data = WarehouseSerializer(warehouse).data
                         warehouse_data["warehouse_id"] = warehouse.id
                         warehouse_data["material_name"] = material_data["name"]
@@ -46,7 +46,7 @@ class DataWarehouse(viewsets.ModelViewSet):
                         total_qty = 0
                     else:
                         total_qty -= warehouse_remainder
-                        warehouse_remainders[warehouse.id] = 0  # Lug'atni yangilash
+                        warehouse_remainders[warehouse.id] = 0
                         warehouse_data = WarehouseSerializer(warehouse).data
                         warehouse_data["warehouse_id"] = warehouse.id
                         warehouse_data["material_name"] = material_data["name"]
