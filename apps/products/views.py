@@ -36,7 +36,7 @@ class DataWarehouse(viewsets.ModelViewSet):
                         break
                     if warehouse_remainder >= total_qty:
                         warehouse_remainders[warehouse.id] = (
-                                warehouse_remainder - total_qty
+                            warehouse_remainder - total_qty
                         )  # Lug'atni yangilash
                         warehouse_data = WarehouseSerializer(warehouse).data
                         warehouse_data["warehouse_id"] = warehouse.id
