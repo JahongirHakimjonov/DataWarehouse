@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
-from .views import ProductViewSet
+from .views import DataWarehouse
 
 router = DefaultRouter()
-router.register(r"warehouse_data", ProductViewSet, basename="warehouse_data")
+router.register(r"warehouse_data", DataWarehouse, basename="warehouse_data")
 
 urlpatterns = router.urls

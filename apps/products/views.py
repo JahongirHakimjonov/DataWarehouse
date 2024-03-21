@@ -8,19 +8,7 @@ from rest_framework.response import Response
 from .models import Product, Warehouse, ProductMaterial
 
 
-class WarehouseViewSet(viewsets.ModelViewSet):
-    serializer_class = WarehouseSerializer
-
-    def get_queryset(self):
-        # Omborxonadan kerakli xomashyolar
-        product_materials = ProductMaterial.objects.filter(
-            product__name=self.request.query_params.get("product_name")
-        )
-        material_ids = product_materials.values_list("material", flat=True)
-        return Warehouse.objects.filter(material__in=material_ids)
-
-
-class ProductViewSet(viewsets.ModelViewSet):
+class DataWarehouse(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
@@ -48,7 +36,7 @@ class ProductViewSet(viewsets.ModelViewSet):
                         break
                     if warehouse_remainder >= total_qty:
                         warehouse_remainders[warehouse.id] = (
-                            warehouse_remainder - total_qty
+                                warehouse_remainder - total_qty
                         )  # Lug'atni yangilash
                         warehouse_data = WarehouseSerializer(warehouse).data
                         warehouse_data["warehouse_id"] = warehouse.id
