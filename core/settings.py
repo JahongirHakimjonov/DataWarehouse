@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     "apps.products.apps.ProductsConfig",
     "apps.shared.apps.SharedConfig",
     "rest_framework",
+    "drf_yasg",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
 ]
 
 MIDDLEWARE = [
@@ -82,23 +85,23 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("SQL_DATABASE"),
-        "USER": os.getenv("SQL_USER"),
-        "PASSWORD": os.getenv("SQL_PASSWORD"),
-        "HOST": os.getenv("SQL_HOST"),
-        "PORT": os.getenv("SQL_PORT"),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("SQL_DATABASE"),
+#         "USER": os.getenv("SQL_USER"),
+#         "PASSWORD": os.getenv("SQL_PASSWORD"),
+#         "HOST": os.getenv("SQL_HOST"),
+#         "PORT": os.getenv("SQL_PORT"),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -117,6 +120,17 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "SWAGGER_UI_DIST": "SIDECAR",
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+    "TITLE": "Data Warehouse API",
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
